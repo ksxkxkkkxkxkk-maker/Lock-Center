@@ -4,7 +4,7 @@
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0, maximum-scale=1.0, user-scalable=no">
     
-    <!-- ===== WEBCLIP CHO iOS ===== -->
+    <!-- WEBCLIP CHO iOS -->
     <meta name="apple-mobile-web-app-capable" content="yes">
     <meta name="apple-mobile-web-app-status-bar-style" content="black-translucent">
     <meta name="apple-mobile-web-app-title" content="LockCenter FF">
@@ -38,10 +38,7 @@
             padding: 20px;
             transition: opacity 0.5s ease;
         }
-        #loginScreen.hidden {
-            opacity: 0;
-            pointer-events: none;
-        }
+        #loginScreen.hidden { opacity: 0; pointer-events: none; }
         #loginScreen .login-box {
             max-width: 380px;
             width: 100%;
@@ -59,11 +56,7 @@
             -webkit-text-fill-color: transparent;
             margin-bottom: 4px;
         }
-        #loginScreen .login-box .sub {
-            color: #666699;
-            font-size: 13px;
-            margin-bottom: 20px;
-        }
+        #loginScreen .login-box .sub { color: #666699; font-size: 13px; margin-bottom: 20px; }
         #loginScreen .login-box .key-hint {
             color: #444466;
             font-size: 12px;
@@ -118,25 +111,10 @@
             transform: scale(1.02);
             box-shadow: 0 8px 30px rgba(0, 100, 255, 0.4);
         }
-        #loginScreen .login-box .login-error {
-            color: #ff4466;
-            font-size: 13px;
-            margin-top: 12px;
-            min-height: 24px;
-            font-weight: 500;
-        }
-        #loginScreen .login-box .login-success {
-            color: #00ff88;
-            font-size: 13px;
-            margin-top: 12px;
-            min-height: 24px;
-            font-weight: 500;
-        }
-        #loginScreen .login-box .date-info {
-            color: #444466;
-            font-size: 11px;
-            margin-top: 12px;
-        }
+        #loginScreen .login-box .login-error { color: #ff4466; font-size: 13px; margin-top: 12px; min-height: 24px; font-weight: 500; }
+        #loginScreen .login-box .login-success { color: #00ff88; font-size: 13px; margin-top: 12px; min-height: 24px; font-weight: 500; }
+        #loginScreen .login-box .date-info { color: #444466; font-size: 11px; margin-top: 12px; }
+
         .toast-msg {
             position: fixed;
             bottom: 30px;
@@ -157,21 +135,10 @@
             max-width: 90%;
             text-align: center;
         }
-        .toast-msg.error {
-            background: #1a0a0a;
-            color: #ff4466;
-            border: 1px solid #662222;
-        }
-        .toast-msg.success {
-            background: #0a1a0a;
-            color: #00ff88;
-            border: 1px solid #226622;
-        }
-        .toast-msg.prem {
-            background: #1a0f0a;
-            color: #ff8800;
-            border: 1px solid #886622;
-        }
+        .toast-msg.error { background: #1a0a0a; color: #ff4466; border: 1px solid #662222; }
+        .toast-msg.success { background: #0a1a0a; color: #00ff88; border: 1px solid #226622; }
+        .toast-msg.prem { background: #1a0f0a; color: #ff8800; border: 1px solid #886622; }
+
         .lock-center {
             max-width: 420px;
             width: 100%;
@@ -198,22 +165,9 @@
             -webkit-text-fill-color: transparent;
             letter-spacing: 0.5px;
         }
-        .header h1 small {
-            font-size: 10px;
-            color: #666699;
-            -webkit-text-fill-color: #666699;
-            background: none;
-            font-weight: 400;
-            margin-left: 4px;
-        }
-        .header .badge {
-            background: #1f1f33;
-            padding: 3px 10px;
-            border-radius: 20px;
-            font-size: 10px;
-            color: #8888bb;
-            border: 1px solid #2f2f4a;
-        }
+        .header h1 small { font-size: 10px; color: #666699; -webkit-text-fill-color: #666699; background: none; font-weight: 400; margin-left: 4px; }
+        .header .badge { background: #1f1f33; padding: 3px 10px; border-radius: 20px; font-size: 10px; color: #8888bb; border: 1px solid #2f2f4a; }
+        
         .logout-btn {
             position: absolute;
             top: 16px;
@@ -233,10 +187,7 @@
             font-weight: 700;
             z-index: 10;
         }
-        .logout-btn:hover {
-            background: rgba(255, 68, 68, 0.3);
-            transform: scale(1.1);
-        }
+        .logout-btn:hover { background: rgba(255, 68, 68, 0.3); transform: scale(1.1); }
         .logout-btn .tooltip {
             position: absolute;
             top: 44px;
@@ -253,9 +204,8 @@
             pointer-events: none;
             font-weight: 500;
         }
-        .logout-btn:hover .tooltip {
-            opacity: 1;
-        }
+        .logout-btn:hover .tooltip { opacity: 1; }
+
         .key-timer {
             background: #0f0f18;
             border-radius: 16px;
@@ -268,31 +218,12 @@
             font-size: 13px;
             color: #8888bb;
         }
-        .key-timer .time {
-            color: #00ff88;
-            font-weight: 700;
-            font-family: 'Courier New', monospace;
-            font-size: 16px;
-        }
-        .key-timer .time.expired {
-            color: #ff4466;
-        }
-        .key-timer .type-badge {
-            font-size: 10px;
-            padding: 2px 10px;
-            border-radius: 20px;
-            font-weight: 700;
-        }
-        .key-timer .type-badge.free {
-            background: rgba(0, 255, 136, 0.15);
-            color: #00ff88;
-            border: 1px solid #00ff88;
-        }
-        .key-timer .type-badge.prem {
-            background: rgba(255, 136, 0, 0.15);
-            color: #ff8800;
-            border: 1px solid #ff8800;
-        }
+        .key-timer .time { color: #00ff88; font-weight: 700; font-family: 'Courier New', monospace; font-size: 16px; }
+        .key-timer .time.expired { color: #ff4466; }
+        .key-timer .type-badge { font-size: 10px; padding: 2px 10px; border-radius: 20px; font-weight: 700; }
+        .key-timer .type-badge.free { background: rgba(0, 255, 136, 0.15); color: #00ff88; border: 1px solid #00ff88; }
+        .key-timer .type-badge.prem { background: rgba(255, 136, 0, 0.15); color: #ff8800; border: 1px solid #ff8800; }
+
         .activation-row {
             background: #0f0f18;
             border-radius: 20px;
@@ -304,12 +235,7 @@
             gap: 8px;
             flex-wrap: wrap;
         }
-        .activation-row label {
-            font-size: 14px;
-            font-weight: 600;
-            color: #b0b0d0;
-            white-space: nowrap;
-        }
+        .activation-row label { font-size: 14px; font-weight: 600; color: #b0b0d0; white-space: nowrap; }
         .activation-row input {
             flex: 1;
             min-width: 80px;
@@ -325,15 +251,8 @@
             letter-spacing: 1px;
             transition: 0.2s;
         }
-        .activation-row input:focus {
-            border-color: #00aaff;
-            box-shadow: 0 0 20px rgba(0, 180, 255, 0.15);
-        }
-        .activation-row input::placeholder {
-            color: #444466;
-            font-weight: 400;
-            font-family: 'Segoe UI', sans-serif;
-        }
+        .activation-row input:focus { border-color: #00aaff; box-shadow: 0 0 20px rgba(0, 180, 255, 0.15); }
+        .activation-row input::placeholder { color: #444466; font-weight: 400; font-family: 'Segoe UI', sans-serif; }
         .activation-row .btn-activate {
             background: linear-gradient(90deg, #00aa44, #00dd66);
             border: none;
@@ -349,10 +268,7 @@
             white-space: nowrap;
             box-shadow: 0 4px 16px rgba(0, 200, 80, 0.2);
         }
-        .activation-row .btn-activate:hover {
-            transform: scale(1.03);
-            box-shadow: 0 6px 24px rgba(0, 200, 80, 0.35);
-        }
+        .activation-row .btn-activate:hover { transform: scale(1.03); box-shadow: 0 6px 24px rgba(0, 200, 80, 0.35); }
         .activation-row .btn-clear {
             background: linear-gradient(90deg, #cc0044, #ff2266);
             border: none;
@@ -368,22 +284,72 @@
             white-space: nowrap;
             box-shadow: 0 4px 16px rgba(200, 0, 50, 0.2);
         }
-        .activation-row .btn-clear:hover {
-            transform: scale(1.03);
-            box-shadow: 0 6px 24px rgba(200, 0, 50, 0.35);
+        .activation-row .btn-clear:hover { transform: scale(1.03); box-shadow: 0 6px 24px rgba(200, 0, 50, 0.35); }
+        .activation-row .activation-status { font-size: 12px; color: #666699; min-width: 50px; text-align: right; }
+        .activation-row .activation-status.active { color: #00ff88; }
+        .activation-row .activation-status.error { color: #ff4466; }
+
+        /* ID LIST */
+        .id-list-section {
+            background: #0f0f18;
+            border-radius: 20px;
+            padding: 14px 16px;
+            margin-bottom: 16px;
+            border: 1px solid #1f1f33;
         }
-        .activation-row .activation-status {
+        .id-list-section .title {
+            font-size: 13px;
+            font-weight: 600;
+            color: #b0b0d0;
+            margin-bottom: 8px;
+            display: flex;
+            justify-content: space-between;
+            align-items: center;
+        }
+        .id-list-section .title .count { font-size: 11px; color: #666699; font-weight: 400; }
+        .id-list-container {
+            display: flex;
+            flex-wrap: wrap;
+            gap: 6px;
+            max-height: 120px;
+            overflow-y: auto;
+        }
+        .id-list-container::-webkit-scrollbar { width: 3px; }
+        .id-list-container::-webkit-scrollbar-track { background: #0a0a12; }
+        .id-list-container::-webkit-scrollbar-thumb { background: #2a2a44; border-radius: 10px; }
+        .id-item {
+            display: flex;
+            align-items: center;
+            background: #0a0a12;
+            border: 1px solid #1f1f33;
+            border-radius: 60px;
+            padding: 4px 8px 4px 14px;
+            gap: 6px;
             font-size: 12px;
-            color: #666699;
-            min-width: 50px;
-            text-align: right;
+            color: #00d4ff;
+            font-family: 'Courier New', monospace;
+            letter-spacing: 0.5px;
+            transition: 0.2s;
         }
-        .activation-row .activation-status.active {
-            color: #00ff88;
-        }
-        .activation-row .activation-status.error {
+        .id-item .id-text { max-width: 100px; overflow: hidden; text-overflow: ellipsis; white-space: nowrap; }
+        .id-item .btn-delete-id {
+            background: rgba(255, 68, 68, 0.1);
+            border: none;
             color: #ff4466;
+            width: 20px;
+            height: 20px;
+            border-radius: 50%;
+            cursor: pointer;
+            font-size: 12px;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            transition: 0.2s;
+            font-weight: 700;
         }
+        .id-item .btn-delete-id:hover { background: rgba(255, 68, 68, 0.3); }
+        .id-empty { text-align: center; color: #444466; font-size: 12px; padding: 6px 0; width: 100%; }
+
         .file-support-row {
             background: #0f0f18;
             border-radius: 20px;
@@ -395,12 +361,7 @@
             gap: 8px;
             flex-wrap: wrap;
         }
-        .file-support-row label {
-            font-size: 14px;
-            font-weight: 600;
-            color: #b0b0d0;
-            white-space: nowrap;
-        }
+        .file-support-row label { font-size: 14px; font-weight: 600; color: #b0b0d0; white-space: nowrap; }
         .file-support-row input[type="file"] {
             flex: 1;
             min-width: 80px;
@@ -440,96 +401,10 @@
             white-space: nowrap;
             box-shadow: 0 4px 16px rgba(200, 0, 50, 0.2);
         }
-        .file-support-row .btn-clear-file:hover {
-            transform: scale(1.03);
-            box-shadow: 0 6px 24px rgba(200, 0, 50, 0.35);
-        }
-        .file-support-row .file-status {
-            font-size: 12px;
-            color: #666699;
-            min-width: 50px;
-            text-align: right;
-        }
-        .file-support-row .file-status.active {
-            color: #00ff88;
-        }
-        /* === ID LIST === */
-        .id-list-section {
-            background: #0f0f18;
-            border-radius: 20px;
-            padding: 14px 16px;
-            margin-bottom: 16px;
-            border: 1px solid #1f1f33;
-        }
-        .id-list-section .title {
-            font-size: 13px;
-            font-weight: 600;
-            color: #b0b0d0;
-            margin-bottom: 8px;
-            display: flex;
-            justify-content: space-between;
-            align-items: center;
-        }
-        .id-list-section .title .count {
-            font-size: 11px;
-            color: #666699;
-            font-weight: 400;
-        }
-        .id-list-container {
-            display: flex;
-            flex-wrap: wrap;
-            gap: 6px;
-            max-height: 120px;
-            overflow-y: auto;
-        }
-        .id-list-container::-webkit-scrollbar { width: 3px; }
-        .id-list-container::-webkit-scrollbar-track { background: #0a0a12; }
-        .id-list-container::-webkit-scrollbar-thumb { background: #2a2a44; border-radius: 10px; }
-        .id-item {
-            display: flex;
-            align-items: center;
-            background: #0a0a12;
-            border: 1px solid #1f1f33;
-            border-radius: 60px;
-            padding: 4px 8px 4px 14px;
-            gap: 6px;
-            font-size: 12px;
-            color: #00d4ff;
-            font-family: 'Courier New', monospace;
-            letter-spacing: 0.5px;
-            transition: 0.2s;
-        }
-        .id-item .id-text {
-            max-width: 100px;
-            overflow: hidden;
-            text-overflow: ellipsis;
-            white-space: nowrap;
-        }
-        .id-item .btn-delete-id {
-            background: rgba(255, 68, 68, 0.1);
-            border: none;
-            color: #ff4466;
-            width: 20px;
-            height: 20px;
-            border-radius: 50%;
-            cursor: pointer;
-            font-size: 12px;
-            display: flex;
-            align-items: center;
-            justify-content: center;
-            transition: 0.2s;
-            font-weight: 700;
-        }
-        .id-item .btn-delete-id:hover {
-            background: rgba(255, 68, 68, 0.3);
-        }
-        .id-empty {
-            text-align: center;
-            color: #444466;
-            font-size: 12px;
-            padding: 6px 0;
-            width: 100%;
-        }
+        .file-support-row .btn-clear-file:hover { transform: scale(1.03); box-shadow: 0 6px 24px rgba(200, 0, 50, 0.35); }
+        .file-support-row .file-status { font-size: 12px; color: #666699; min-width: 50px; text-align: right; }
+        .file-support-row .file-status.active { color: #00ff88; }
+
         .control-group {
             background: #0f0f18;
             border-radius: 20px;
@@ -545,12 +420,7 @@
             color: #b0b0d0;
             margin-bottom: 8px;
         }
-        .control-label .value {
-            color: #00d4ff;
-            font-weight: 700;
-            min-width: 48px;
-            text-align: right;
-        }
+        .control-label .value { color: #00d4ff; font-weight: 700; min-width: 48px; text-align: right; }
         input[type="range"] {
             -webkit-appearance: none;
             appearance: none;
@@ -574,10 +444,7 @@
             border: 2px solid #0a0a12;
             transition: 0.15s;
         }
-        input[type="range"]::-webkit-slider-thumb:hover {
-            transform: scale(1.12);
-            box-shadow: 0 0 30px rgba(0, 200, 255, 0.6);
-        }
+        input[type="range"]::-webkit-slider-thumb:hover { transform: scale(1.12); box-shadow: 0 0 30px rgba(0, 200, 255, 0.6); }
         input[type="range"]::-moz-range-thumb {
             width: 20px;
             height: 20px;
@@ -586,6 +453,7 @@
             cursor: pointer;
             border: 2px solid #0a0a12;
         }
+
         .toggle-row {
             display: flex;
             justify-content: space-between;
@@ -593,20 +461,9 @@
             padding: 10px 0;
             border-bottom: 1px solid #1a1a2e;
         }
-        .toggle-row:last-child {
-            border-bottom: none;
-        }
-        .toggle-row .label {
-            font-size: 15px;
-            font-weight: 500;
-            color: #c0c0e0;
-        }
-        .toggle-row .label small {
-            font-weight: 300;
-            color: #666699;
-            font-size: 12px;
-            margin-left: 8px;
-        }
+        .toggle-row:last-child { border-bottom: none; }
+        .toggle-row .label { font-size: 15px; font-weight: 500; color: #c0c0e0; }
+        .toggle-row .label small { font-weight: 300; color: #666699; font-size: 12px; margin-left: 8px; }
         .toggle-switch {
             position: relative;
             width: 48px;
@@ -634,16 +491,9 @@
             transition: 0.25s cubic-bezier(0.34, 1.56, 0.64, 1);
             box-shadow: 0 2px 6px rgba(0,0,0,0.5);
         }
-        .toggle-switch.active .knob {
-            left: 22px;
-            background: #ffffff;
-            box-shadow: 0 0 20px rgba(0, 200, 255, 0.5);
-        }
-        .footer-actions {
-            display: flex;
-            gap: 12px;
-            margin-top: 20px;
-        }
+        .toggle-switch.active .knob { left: 22px; background: #ffffff; box-shadow: 0 0 20px rgba(0, 200, 255, 0.5); }
+
+        .footer-actions { display: flex; gap: 12px; margin-top: 20px; }
         .btn {
             flex: 1;
             padding: 14px 10px;
@@ -665,19 +515,15 @@
             border: none;
             box-shadow: 0 6px 20px rgba(0, 100, 255, 0.25);
         }
-        .btn-primary:hover {
-            transform: scale(1.02);
-            box-shadow: 0 8px 30px rgba(0, 100, 255, 0.4);
-        }
+        .btn-primary:hover { transform: scale(1.02); box-shadow: 0 8px 30px rgba(0, 100, 255, 0.4); }
         .btn-danger {
             background: linear-gradient(90deg, #880022, #cc0044);
             color: #fff;
             border: none;
             box-shadow: 0 6px 20px rgba(200, 0, 50, 0.25);
         }
-        .btn-danger:hover {
-            transform: scale(1.02);
-        }
+        .btn-danger:hover { transform: scale(1.02); }
+
         .btn-game {
             flex: 1;
             padding: 12px 8px;
@@ -694,35 +540,14 @@
             border: 1px solid #2a4a6a;
             box-shadow: 0 4px 12px rgba(0,0,0,0.4);
         }
-        .btn-game:hover {
-            transform: scale(1.03);
-            box-shadow: 0 6px 24px rgba(0, 150, 255, 0.2);
-        }
-        .btn-game .icon {
-            font-size: 18px;
-            margin-right: 6px;
-        }
-        .btn-game-ff {
-            border-color: #ff6a00;
-            background: linear-gradient(135deg, #2a1a0a, #1a0e00);
-        }
-        .btn-game-ff:hover {
-            border-color: #ff8800;
-            box-shadow: 0 6px 24px rgba(255, 100, 0, 0.25);
-        }
-        .btn-game-ffmax {
-            border-color: #00aaff;
-            background: linear-gradient(135deg, #0a1a2a, #000e1a);
-        }
-        .btn-game-ffmax:hover {
-            border-color: #44ccff;
-            box-shadow: 0 6px 24px rgba(0, 170, 255, 0.25);
-        }
-        .game-launch-row {
-            display: flex;
-            gap: 12px;
-            margin-top: 12px;
-        }
+        .btn-game:hover { transform: scale(1.03); box-shadow: 0 6px 24px rgba(0, 150, 255, 0.2); }
+        .btn-game .icon { font-size: 18px; margin-right: 6px; }
+        .btn-game-ff { border-color: #ff6a00; background: linear-gradient(135deg, #2a1a0a, #1a0e00); }
+        .btn-game-ff:hover { border-color: #ff8800; box-shadow: 0 6px 24px rgba(255, 100, 0, 0.25); }
+        .btn-game-ffmax { border-color: #00aaff; background: linear-gradient(135deg, #0a1a2a, #000e1a); }
+        .btn-game-ffmax:hover { border-color: #44ccff; box-shadow: 0 6px 24px rgba(0, 170, 255, 0.25); }
+        .game-launch-row { display: flex; gap: 12px; margin-top: 12px; }
+
         .status-bar {
             margin-top: 16px;
             padding: 10px 14px;
@@ -734,9 +559,8 @@
             border: 1px solid #1a1a2e;
             font-family: monospace;
         }
-        .status-bar span {
-            color: #00d4ff;
-        }
+        .status-bar span { color: #00d4ff; }
+
         @media (max-width: 460px) {
             .lock-center { padding: 16px; }
             .logout-btn { top: 12px; right: 12px; width: 32px; height: 32px; font-size: 16px; }
@@ -751,7 +575,7 @@
 </head>
 <body>
 
-<!-- ===== MÀN HÌNH ĐEN ĐĂNG NHẬP ===== -->
+<!-- MÀN HÌNH ĐEN ĐĂNG NHẬP -->
 <div id="loginScreen">
     <div class="login-box">
         <h2>🔐 LOCK CENTER</h2>
@@ -765,9 +589,8 @@
     </div>
 </div>
 
-<!-- ===== MENU LOCK CENTER ===== -->
+<!-- MENU LOCK CENTER -->
 <div class="lock-center" id="menuScreen" style="display:none;">
-    <!-- === NÚT THOÁT KEY === -->
     <div class="logout-btn" onclick="logoutKey()" title="Đăng xuất">
         ✕
         <span class="tooltip">Thoát key</span>
@@ -775,10 +598,9 @@
 
     <div class="header">
         <h1>⚡ LOCK CENTER <small>(by hthiet)</small></h1>
-        <span class="badge" id="menuBadge">v4.2 • FF</span>
+        <span class="badge" id="menuBadge">v4.3 • FF</span>
     </div>
 
-    <!-- === TIMER KEY === -->
     <div class="key-timer" id="keyTimer">
         <span>⏳ Key còn hiệu lực</span>
         <span class="time" id="timerDisplay">--:--:--</span>
@@ -793,7 +615,6 @@
         <span class="activation-status" id="activationStatus">⚪</span>
     </div>
 
-    <!-- === DANH SÁCH ID ĐÃ NHẬP === -->
     <div class="id-list-section">
         <div class="title">
             📋 ID đã nhập
@@ -900,47 +721,131 @@
 
     function getTodayFreeKey() { return generateDailyKey(new Date()); }
 
-    // ============================================================
-    // 2. HÀM TÍNH THỜI GIAN HẾT HẠN (FREE: 00:00 NGÀY MAI)
-    // ============================================================
     function getFreeKeyExpiry() {
         const now = new Date();
         const tomorrow = new Date(now);
         tomorrow.setDate(tomorrow.getDate() + 1);
-        tomorrow.setHours(0, 0, 0, 0); // 00:00:00 ngày mai
+        tomorrow.setHours(0, 0, 0, 0);
         return tomorrow.getTime();
     }
 
     // ============================================================
-    // 3. LẤY KEY PREM TỪ ADMIN PRO V3
+    // 2. LẤY DANH SÁCH KEY PREM (ĐỒNG BỘ VỚI ADMIN)
     // ============================================================
     function getPremList() {
         const saved = localStorage.getItem('admin_prem_list');
         if (!saved) return [];
         try {
             const list = JSON.parse(saved);
-            return list.filter(item => item.expiry > Date.now());
-        } catch(e) { return []; }
-    }
-
-    function getPremKeyData() {
-        const list = getPremList();
-        if (list.length > 0) return list[0];
-        return null;
-    }
-
-    function getPremKey() {
-        const data = getPremKeyData();
-        return data ? data.key : null;
-    }
-
-    function getPremExpiry() {
-        const data = getPremKeyData();
-        return data ? data.expiry : null;
+            const valid = list.filter(item => item.expiry > Date.now());
+            if (valid.length !== list.length) {
+                localStorage.setItem('admin_prem_list', JSON.stringify(valid));
+            }
+            return valid;
+        } catch(e) {
+            localStorage.removeItem('admin_prem_list');
+            return [];
+        }
     }
 
     // ============================================================
-    // 4. QUẢN LÝ DANH SÁCH ID
+    // 3. LẤY KEY ĐANG HOẠT ĐỘNG
+    // ============================================================
+    function getActiveKey() {
+        const premList = getPremList();
+        const activePremId = localStorage.getItem('lockcenter_active_prem_id');
+        if (activePremId) {
+            const prem = premList.find(item => item.id === activePremId);
+            if (prem) return prem.key;
+        }
+        return getTodayFreeKey();
+    }
+
+    function getActiveKeyType() {
+        const premList = getPremList();
+        const activePremId = localStorage.getItem('lockcenter_active_prem_id');
+        if (activePremId && premList.some(item => item.id === activePremId)) {
+            return 'prem';
+        }
+        return 'free';
+    }
+
+    function getActiveKeyExpiry() {
+        const premList = getPremList();
+        const activePremId = localStorage.getItem('lockcenter_active_prem_id');
+        if (activePremId) {
+            const prem = premList.find(item => item.id === activePremId);
+            if (prem) return prem.expiry;
+        }
+        return getFreeKeyExpiry();
+    }
+
+    function isKeyValid() {
+        const savedKey = localStorage.getItem('lockcenter_saved_key');
+        if (!savedKey) return false;
+        const expiry = getActiveKeyExpiry();
+        if (!expiry) return false;
+        const activeKey = getActiveKey();
+        if (savedKey !== activeKey) return false;
+        return Date.now() < expiry;
+    }
+
+    function getRemainingTime() {
+        const expiry = getActiveKeyExpiry();
+        if (!expiry) return 0;
+        const remaining = expiry - Date.now();
+        return remaining > 0 ? remaining : 0;
+    }
+
+    function formatTime(ms) {
+        if (ms <= 0) return '00:00:00';
+        const totalSec = Math.floor(ms / 1000);
+        const h = String(Math.floor(totalSec / 3600)).padStart(2, '0');
+        const m = String(Math.floor((totalSec % 3600) / 60)).padStart(2, '0');
+        const s = String(totalSec % 60).padStart(2, '0');
+        return `${h}:${m}:${s}`;
+    }
+
+    // ============================================================
+    // 4. TIMER
+    // ============================================================
+    let timerInterval = null;
+
+    function startTimer() {
+        if (timerInterval) clearInterval(timerInterval);
+        updateTimerDisplay();
+        timerInterval = setInterval(function() {
+            const remaining = getRemainingTime();
+            if (remaining <= 0) {
+                clearInterval(timerInterval);
+                timerInterval = null;
+                localStorage.removeItem('lockcenter_saved_key');
+                localStorage.removeItem('lockcenter_login_time');
+                localStorage.removeItem('lockcenter_active_prem_id');
+                document.getElementById('loginScreen').classList.remove('hidden');
+                document.getElementById('menuScreen').style.display = 'none';
+                document.getElementById('loginError').textContent = '⏰ Key đã hết hạn! Vui lòng nhập key mới.';
+                showToast('⏰ Key đã hết hạn!', 'error');
+                return;
+            }
+            updateTimerDisplay();
+        }, 1000);
+    }
+
+    function updateTimerDisplay() {
+        const remaining = getRemainingTime();
+        const timerEl = document.getElementById('timerDisplay');
+        if (remaining > 0) {
+            timerEl.textContent = formatTime(remaining);
+            timerEl.className = 'time';
+        } else {
+            timerEl.textContent = 'Hết hạn';
+            timerEl.className = 'time expired';
+        }
+    }
+
+    // ============================================================
+    // 5. QUẢN LÝ ID
     // ============================================================
     function getSavedIds() {
         const saved = localStorage.getItem('lockcenter_saved_ids');
@@ -994,53 +899,6 @@
     }
 
     // ============================================================
-    // 5. LẤY KEY ĐANG HOẠT ĐỘNG
-    // ============================================================
-    function getActiveKey() {
-        const prem = getPremKey();
-        if (prem) return prem;
-        return getTodayFreeKey();
-    }
-
-    function getActiveKeyType() {
-        const prem = getPremKey();
-        if (prem) return 'prem';
-        return 'free';
-    }
-
-    function getActiveKeyExpiry() {
-        const premExpiry = getPremExpiry();
-        if (premExpiry) return premExpiry;
-        // FREE key: hết hạn vào 00:00 ngày mai
-        return getFreeKeyExpiry();
-    }
-
-    function isKeyValid() {
-        const savedKey = localStorage.getItem('lockcenter_saved_key');
-        if (!savedKey) return false;
-        const expiry = getActiveKeyExpiry();
-        if (!expiry) return false;
-        const activeKey = getActiveKey();
-        if (savedKey !== activeKey) return false;
-        return Date.now() < expiry;
-    }
-
-    function getRemainingTime() {
-        const expiry = getActiveKeyExpiry();
-        if (!expiry) return 0;
-        const remaining = expiry - Date.now();
-        return remaining > 0 ? remaining : 0;
-    }
-
-    function formatTime(ms) {
-        const totalSec = Math.floor(ms / 1000);
-        const h = String(Math.floor(totalSec / 3600)).padStart(2, '0');
-        const m = String(Math.floor((totalSec % 3600) / 60)).padStart(2, '0');
-        const s = String(totalSec % 60).padStart(2, '0');
-        return `${h}:${m}:${s}`;
-    }
-
-    // ============================================================
     // 6. KIỂM TRA TỰ ĐỘNG
     // ============================================================
     function checkAndAutoLogin() {
@@ -1050,6 +908,7 @@
         if (savedKey && savedKey !== activeKey) {
             localStorage.removeItem('lockcenter_saved_key');
             localStorage.removeItem('lockcenter_login_time');
+            localStorage.removeItem('lockcenter_active_prem_id');
         }
 
         if (isKeyValid()) {
@@ -1066,6 +925,7 @@
             document.getElementById('menuScreen').style.display = 'none';
             localStorage.removeItem('lockcenter_saved_key');
             localStorage.removeItem('lockcenter_login_time');
+            localStorage.removeItem('lockcenter_active_prem_id');
             return false;
         }
     }
@@ -1090,15 +950,18 @@
         if (userKey === freeKey) {
             localStorage.setItem('lockcenter_saved_key', freeKey);
             localStorage.setItem('lockcenter_login_time', String(Date.now()));
+            localStorage.removeItem('lockcenter_active_prem_id');
             if (currentId) addIdToList(currentId);
             playSuccessSound();
             success.textContent = '✅ Đăng nhập thành công! Key FREE có hiệu lực đến 00:00.';
             setTimeout(() => { enterMenu('free'); }, 800);
+            console.log('[LockCenter] Đăng nhập FREE:', freeKey);
             return;
         }
 
         // 2. Kiểm tra tất cả KEY PREM
         const premList = getPremList();
+        console.log('[LockCenter] Danh sách PREM hiện có:', premList);
         const matchedPrem = premList.find(item => item.key === userKey);
         if (matchedPrem) {
             localStorage.setItem('lockcenter_saved_key', matchedPrem.key);
@@ -1109,6 +972,7 @@
             const timeStr = matchedPrem.hours ? matchedPrem.hours + ' giờ' : 'tùy chỉnh';
             success.textContent = '✅ Đăng nhập thành công! Key PREM "' + (matchedPrem.name || '') + '" có hiệu lực ' + timeStr + '.';
             setTimeout(() => { enterMenu('prem', matchedPrem); }, 800);
+            console.log('[LockCenter] Đăng nhập PREM:', matchedPrem.key);
             return;
         }
 
@@ -1118,6 +982,7 @@
         input.value = '';
         input.focus();
         showToast('❌ Sai key, hãy thử lại!', 'error');
+        console.log('[LockCenter] Key không khớp:', userKey);
     }
 
     function enterMenu(type, premData = null) {
@@ -1170,48 +1035,31 @@
             badge.textContent = '🆓 FREE';
             badge.className = 'type-badge free';
             timerEl.style.borderColor = '#1f1f33';
-            menuBadge.textContent = 'v4.2 • FF';
+            menuBadge.textContent = 'v4.3 • FF';
         }
     }
 
     // ============================================================
-    // 10. TIMER
+    // 10. KIỂM TRA HẾT HẠN KHI QUAY LẠI TAB
     // ============================================================
-    let timerInterval = null;
-
-    function startTimer() {
-        if (timerInterval) clearInterval(timerInterval);
-        updateTimerDisplay();
-        timerInterval = setInterval(function() {
-            const remaining = getRemainingTime();
-            if (remaining <= 0) {
-                clearInterval(timerInterval);
-                timerInterval = null;
+    document.addEventListener('visibilitychange', function() {
+        if (!document.hidden) {
+            if (!isKeyValid() && document.getElementById('menuScreen').style.display !== 'none') {
                 localStorage.removeItem('lockcenter_saved_key');
                 localStorage.removeItem('lockcenter_login_time');
                 localStorage.removeItem('lockcenter_active_prem_id');
+                if (timerInterval) clearInterval(timerInterval);
+                timerInterval = null;
                 document.getElementById('loginScreen').classList.remove('hidden');
                 document.getElementById('menuScreen').style.display = 'none';
-                document.getElementById('loginError').textContent = '⏰ Key đã hết hạn lúc 00:00! Vui lòng nhập key mới.';
-                renderIdList();
+                document.getElementById('loginError').textContent = '⏰ Key đã hết hạn! Vui lòng nhập key mới.';
                 showToast('⏰ Key đã hết hạn!', 'error');
-                return;
+            } else if (isKeyValid() && document.getElementById('menuScreen').style.display !== 'none') {
+                if (!timerInterval) startTimer();
+                updateTimerDisplay();
             }
-            updateTimerDisplay();
-        }, 1000);
-    }
-
-    function updateTimerDisplay() {
-        const remaining = getRemainingTime();
-        const timerEl = document.getElementById('timerDisplay');
-        if (remaining > 0) {
-            timerEl.textContent = formatTime(remaining);
-            timerEl.className = 'time';
-        } else {
-            timerEl.textContent = 'Hết hạn';
-            timerEl.className = 'time expired';
         }
-    }
+    });
 
     // ============================================================
     // 11. AUDIO
@@ -1452,28 +1300,7 @@
     }
 
     // ============================================================
-    // 13. KIỂM TRA HẾT HẠN KHI TAB ĐƯỢC FOCUS
-    // ============================================================
-    document.addEventListener('visibilitychange', function() {
-        if (!document.hidden) {
-            // Khi người dùng quay lại tab, kiểm tra key có hết hạn không
-            if (!isKeyValid() && document.getElementById('menuScreen').style.display !== 'none') {
-                localStorage.removeItem('lockcenter_saved_key');
-                localStorage.removeItem('lockcenter_login_time');
-                localStorage.removeItem('lockcenter_active_prem_id');
-                if (timerInterval) clearInterval(timerInterval);
-                timerInterval = null;
-                document.getElementById('loginScreen').classList.remove('hidden');
-                document.getElementById('menuScreen').style.display = 'none';
-                document.getElementById('loginError').textContent = '⏰ Key đã hết hạn lúc 00:00! Vui lòng nhập key mới.';
-                renderIdList();
-                showToast('⏰ Key đã hết hạn!', 'error');
-            }
-        }
-    });
-
-    // ============================================================
-    // 14. KHỞI TẠO
+    // 13. KHỞI TẠO
     // ============================================================
     window.onload = function() {
         loadSavedConfig();
@@ -1495,21 +1322,13 @@
             document.removeEventListener('click', initAudio);
         }, { once: true });
         
-        console.log('[LockCenter] v4.2 - Key FREE hết hạn lúc 00:00');
+        console.log('[LockCenter] v4.3 - Đã đồng bộ với Admin Pro V3');
         console.log('[LockCenter] Key FREE hôm nay:', getTodayFreeKey());
-        console.log('[LockCenter] Hết hạn vào:', new Date(getFreeKeyExpiry()).toLocaleString('vi-VN'));
-        const premList = getPremList();
-        if (premList.length > 0) {
-            console.log('[LockCenter] Số key PREM đang có:', premList.length);
-        }
-        const ids = getSavedIds();
-        if (ids.length > 0) {
-            console.log('[LockCenter] ID đã lưu:', ids.length);
-        }
+        console.log('[LockCenter] Danh sách PREM:', getPremList());
     };
 
     // ============================================================
-    // 15. EXPOSE
+    // 14. EXPOSE
     // ============================================================
     window.handleLogin = handleLogin;
     window.logoutKey = logoutKey;
@@ -1527,6 +1346,7 @@
     window.getActiveKey = getActiveKey;
     window.getActiveKeyType = getActiveKeyType;
     window.getFreeKeyExpiry = getFreeKeyExpiry;
+    window.getRemainingTime = getRemainingTime;
 </script>
 </body>
 </html>
