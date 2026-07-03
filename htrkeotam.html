@@ -167,6 +167,11 @@
             color: #00ff88;
             border: 1px solid #226622;
         }
+        .toast-msg.prem {
+            background: #1a0f0a;
+            color: #ff8800;
+            border: 1px solid #886622;
+        }
         .lock-center {
             max-width: 420px;
             width: 100%;
@@ -448,6 +453,83 @@
         .file-support-row .file-status.active {
             color: #00ff88;
         }
+        /* === ID LIST === */
+        .id-list-section {
+            background: #0f0f18;
+            border-radius: 20px;
+            padding: 14px 16px;
+            margin-bottom: 16px;
+            border: 1px solid #1f1f33;
+        }
+        .id-list-section .title {
+            font-size: 13px;
+            font-weight: 600;
+            color: #b0b0d0;
+            margin-bottom: 8px;
+            display: flex;
+            justify-content: space-between;
+            align-items: center;
+        }
+        .id-list-section .title .count {
+            font-size: 11px;
+            color: #666699;
+            font-weight: 400;
+        }
+        .id-list-container {
+            display: flex;
+            flex-wrap: wrap;
+            gap: 6px;
+            max-height: 120px;
+            overflow-y: auto;
+        }
+        .id-list-container::-webkit-scrollbar { width: 3px; }
+        .id-list-container::-webkit-scrollbar-track { background: #0a0a12; }
+        .id-list-container::-webkit-scrollbar-thumb { background: #2a2a44; border-radius: 10px; }
+        .id-item {
+            display: flex;
+            align-items: center;
+            background: #0a0a12;
+            border: 1px solid #1f1f33;
+            border-radius: 60px;
+            padding: 4px 8px 4px 14px;
+            gap: 6px;
+            font-size: 12px;
+            color: #00d4ff;
+            font-family: 'Courier New', monospace;
+            letter-spacing: 0.5px;
+            transition: 0.2s;
+        }
+        .id-item .id-text {
+            max-width: 100px;
+            overflow: hidden;
+            text-overflow: ellipsis;
+            white-space: nowrap;
+        }
+        .id-item .btn-delete-id {
+            background: rgba(255, 68, 68, 0.1);
+            border: none;
+            color: #ff4466;
+            width: 20px;
+            height: 20px;
+            border-radius: 50%;
+            cursor: pointer;
+            font-size: 12px;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            transition: 0.2s;
+            font-weight: 700;
+        }
+        .id-item .btn-delete-id:hover {
+            background: rgba(255, 68, 68, 0.3);
+        }
+        .id-empty {
+            text-align: center;
+            color: #444466;
+            font-size: 12px;
+            padding: 6px 0;
+            width: 100%;
+        }
         .control-group {
             background: #0f0f18;
             border-radius: 20px;
@@ -663,6 +745,7 @@
             .file-support-row { flex-wrap: wrap; }
             .file-support-row input[type="file"] { min-width: 100%; }
             .header h1 { font-size: 17px; }
+            .id-item .id-text { max-width: 70px; }
         }
     </style>
 </head>
@@ -692,7 +775,7 @@
 
     <div class="header">
         <h1>⚡ LOCK CENTER <small>(by hthiet)</small></h1>
-        <span class="badge" id="menuBadge">v3.5 • FF</span>
+        <span class="badge" id="menuBadge">v4.2 • FF</span>
     </div>
 
     <!-- === TIMER KEY === -->
@@ -708,6 +791,17 @@
         <button class="btn-activate" onclick="activateId()">Kích hoạt</button>
         <button class="btn-clear" onclick="clearId()">Xoá</button>
         <span class="activation-status" id="activationStatus">⚪</span>
+    </div>
+
+    <!-- === DANH SÁCH ID ĐÃ NHẬP === -->
+    <div class="id-list-section">
+        <div class="title">
+            📋 ID đã nhập
+            <span class="count" id="idCount">0</span>
+        </div>
+        <div class="id-list-container" id="idListContainer">
+            <div class="id-empty">Chưa có ID nào được lưu</div>
+        </div>
     </div>
 
     <div class="file-support-row">
@@ -783,14 +877,13 @@
 
 <script>
     // ============================================================
-    // 1. HÀM SINH KEY FREE
+    // 1. KEY FREE
     // ============================================================
     function generateDailyKey(date) {
         const year = date.getFullYear();
         const month = String(date.getMonth() + 1).padStart(2, '0');
         const day = String(date.getDate()).padStart(2, '0');
         const seed = parseInt(year + month + day);
-        
         let hash = 0;
         let str = String(seed);
         for (let i = 0; i < str.length; i++) {
@@ -805,28 +898,35 @@
         return key + daySuffix;
     }
 
-    function getTodayFreeKey() {
-        return generateDailyKey(new Date());
+    function getTodayFreeKey() { return generateDailyKey(new Date()); }
+
+    // ============================================================
+    // 2. HÀM TÍNH THỜI GIAN HẾT HẠN (FREE: 00:00 NGÀY MAI)
+    // ============================================================
+    function getFreeKeyExpiry() {
+        const now = new Date();
+        const tomorrow = new Date(now);
+        tomorrow.setDate(tomorrow.getDate() + 1);
+        tomorrow.setHours(0, 0, 0, 0); // 00:00:00 ngày mai
+        return tomorrow.getTime();
     }
 
     // ============================================================
-    // 2. LẤY KEY PREM TỪ ADMIN PRO
+    // 3. LẤY KEY PREM TỪ ADMIN PRO V3
     // ============================================================
-    function getPremKeyData() {
-        const saved = localStorage.getItem('admin_prem_key_data');
-        if (!saved) return null;
+    function getPremList() {
+        const saved = localStorage.getItem('admin_prem_list');
+        if (!saved) return [];
         try {
-            const data = JSON.parse(saved);
-            if (data.expiry && Date.now() < data.expiry) {
-                return data;
-            } else {
-                localStorage.removeItem('admin_prem_key_data');
-                return null;
-            }
-        } catch(e) {
-            localStorage.removeItem('admin_prem_key_data');
-            return null;
-        }
+            const list = JSON.parse(saved);
+            return list.filter(item => item.expiry > Date.now());
+        } catch(e) { return []; }
+    }
+
+    function getPremKeyData() {
+        const list = getPremList();
+        if (list.length > 0) return list[0];
+        return null;
     }
 
     function getPremKey() {
@@ -840,7 +940,61 @@
     }
 
     // ============================================================
-    // 3. LẤY KEY ĐANG HOẠT ĐỘNG
+    // 4. QUẢN LÝ DANH SÁCH ID
+    // ============================================================
+    function getSavedIds() {
+        const saved = localStorage.getItem('lockcenter_saved_ids');
+        if (!saved) return [];
+        try { return JSON.parse(saved); }
+        catch(e) { return []; }
+    }
+
+    function saveIds(ids) {
+        localStorage.setItem('lockcenter_saved_ids', JSON.stringify(ids));
+    }
+
+    function addIdToList(id) {
+        if (!id || id.trim() === '') return;
+        const ids = getSavedIds();
+        const trimmedId = id.trim();
+        if (!ids.includes(trimmedId)) {
+            ids.push(trimmedId);
+            saveIds(ids);
+            renderIdList();
+        }
+    }
+
+    function deleteIdFromList(id) {
+        let ids = getSavedIds();
+        ids = ids.filter(item => item !== id);
+        saveIds(ids);
+        renderIdList();
+    }
+
+    function renderIdList() {
+        const container = document.getElementById('idListContainer');
+        const ids = getSavedIds();
+        const countEl = document.getElementById('idCount');
+        countEl.textContent = ids.length;
+        
+        if (ids.length === 0) {
+            container.innerHTML = '<div class="id-empty">Chưa có ID nào được lưu</div>';
+            return;
+        }
+        let html = '';
+        ids.forEach(id => {
+            html += `
+                <div class="id-item">
+                    <span class="id-text" title="${id}">${id}</span>
+                    <button class="btn-delete-id" onclick="deleteIdFromList('${id}')" title="Xoá ID">✕</button>
+                </div>
+            `;
+        });
+        container.innerHTML = html;
+    }
+
+    // ============================================================
+    // 5. LẤY KEY ĐANG HOẠT ĐỘNG
     // ============================================================
     function getActiveKey() {
         const prem = getPremKey();
@@ -857,14 +1011,10 @@
     function getActiveKeyExpiry() {
         const premExpiry = getPremExpiry();
         if (premExpiry) return premExpiry;
-        const saved = localStorage.getItem('lockcenter_login_time');
-        if (!saved) return null;
-        return parseInt(saved) + (24 * 60 * 60 * 1000);
+        // FREE key: hết hạn vào 00:00 ngày mai
+        return getFreeKeyExpiry();
     }
 
-    // ============================================================
-    // 4. KIỂM TRA KEY
-    // ============================================================
     function isKeyValid() {
         const savedKey = localStorage.getItem('lockcenter_saved_key');
         if (!savedKey) return false;
@@ -891,7 +1041,7 @@
     }
 
     // ============================================================
-    // 5. KIỂM TRA TỰ ĐỘNG
+    // 6. KIỂM TRA TỰ ĐỘNG
     // ============================================================
     function checkAndAutoLogin() {
         const activeKey = getActiveKey();
@@ -908,6 +1058,7 @@
             resetToDefault();
             startTimer();
             updateKeyTypeDisplay();
+            renderIdList();
             showToast('✅ Đăng nhập tự động thành công!', 'success');
             return true;
         } else {
@@ -920,7 +1071,7 @@
     }
 
     // ============================================================
-    // 6. XỬ LÝ ĐĂNG NHẬP
+    // 7. XỬ LÝ ĐĂNG NHẬP
     // ============================================================
     function handleLogin() {
         const input = document.getElementById('loginKey');
@@ -928,58 +1079,65 @@
         const success = document.getElementById('loginSuccess');
         const userKey = input.value.trim().toUpperCase();
 
-        // Kiểm tra FREE
-        const freeKey = getTodayFreeKey();
-        // Kiểm tra PREM
-        const premData = getPremKeyData();
-        const premKey = premData ? premData.key : null;
-
         error.textContent = '';
         success.textContent = '';
 
-        let keyType = null;
-        let matchedKey = null;
+        const idInput = document.getElementById('activationId');
+        const currentId = idInput.value.trim();
 
+        // 1. Kiểm tra KEY FREE
+        const freeKey = getTodayFreeKey();
         if (userKey === freeKey) {
-            keyType = 'free';
-            matchedKey = freeKey;
-        } else if (premKey && userKey === premKey) {
-            keyType = 'prem';
-            matchedKey = premKey;
+            localStorage.setItem('lockcenter_saved_key', freeKey);
+            localStorage.setItem('lockcenter_login_time', String(Date.now()));
+            if (currentId) addIdToList(currentId);
+            playSuccessSound();
+            success.textContent = '✅ Đăng nhập thành công! Key FREE có hiệu lực đến 00:00.';
+            setTimeout(() => { enterMenu('free'); }, 800);
+            return;
         }
 
-        if (keyType) {
-            localStorage.setItem('lockcenter_saved_key', matchedKey);
+        // 2. Kiểm tra tất cả KEY PREM
+        const premList = getPremList();
+        const matchedPrem = premList.find(item => item.key === userKey);
+        if (matchedPrem) {
+            localStorage.setItem('lockcenter_saved_key', matchedPrem.key);
             localStorage.setItem('lockcenter_login_time', String(Date.now()));
-            
+            localStorage.setItem('lockcenter_active_prem_id', matchedPrem.id);
+            if (currentId) addIdToList(currentId);
             playSuccessSound();
-            const typeName = keyType === 'prem' ? 'PREM' : 'FREE';
-            success.textContent = '✅ Đăng nhập thành công! Key ' + typeName + ' có hiệu lực.';
-            
-            setTimeout(() => {
-                document.getElementById('loginScreen').classList.add('hidden');
-                document.getElementById('menuScreen').style.display = 'block';
-                resetToDefault();
-                startTimer();
-                updateKeyTypeDisplay();
-                showToast('✅ Đăng nhập thành công!', 'success');
-            }, 800);
-        } else {
-            playErrorSound();
-            error.textContent = '❌ Sai key, vui lòng thử lại!';
-            input.value = '';
-            input.focus();
-            showToast('❌ Sai key, hãy thử lại!', 'error');
+            const timeStr = matchedPrem.hours ? matchedPrem.hours + ' giờ' : 'tùy chỉnh';
+            success.textContent = '✅ Đăng nhập thành công! Key PREM "' + (matchedPrem.name || '') + '" có hiệu lực ' + timeStr + '.';
+            setTimeout(() => { enterMenu('prem', matchedPrem); }, 800);
+            return;
         }
+
+        // 3. Sai key
+        playErrorSound();
+        error.textContent = '❌ Sai key, vui lòng thử lại!';
+        input.value = '';
+        input.focus();
+        showToast('❌ Sai key, hãy thử lại!', 'error');
+    }
+
+    function enterMenu(type, premData = null) {
+        document.getElementById('loginScreen').classList.add('hidden');
+        document.getElementById('menuScreen').style.display = 'block';
+        resetToDefault();
+        startTimer();
+        updateKeyTypeDisplay(type, premData);
+        renderIdList();
+        showToast('✅ Đăng nhập thành công!', 'success');
     }
 
     // ============================================================
-    // 7. THOÁT KEY
+    // 8. THOÁT KEY
     // ============================================================
     function logoutKey() {
         if (confirm('Bạn có chắc muốn thoát key? Bạn sẽ cần nhập lại key để đăng nhập.')) {
             localStorage.removeItem('lockcenter_saved_key');
             localStorage.removeItem('lockcenter_login_time');
+            localStorage.removeItem('lockcenter_active_prem_id');
             if (timerInterval) clearInterval(timerInterval);
             timerInterval = null;
             
@@ -989,21 +1147,22 @@
             document.getElementById('loginKey').focus();
             document.getElementById('loginError').textContent = '';
             document.getElementById('loginSuccess').textContent = '';
+            renderIdList();
             showToast('🚪 Đã thoát key! Vui lòng đăng nhập lại.', 'error');
         }
     }
 
     // ============================================================
-    // 8. HIỂN THỊ LOẠI KEY
+    // 9. HIỂN THỊ LOẠI KEY
     // ============================================================
-    function updateKeyTypeDisplay() {
-        const type = getActiveKeyType();
+    function updateKeyTypeDisplay(type, premData = null) {
         const badge = document.getElementById('keyTypeBadgeMenu');
         const timerEl = document.getElementById('keyTimer');
         const menuBadge = document.getElementById('menuBadge');
         
-        if (type === 'prem') {
-            badge.textContent = '⭐ PREM';
+        if (type === 'prem' || premData) {
+            const name = premData ? premData.name || '' : '';
+            badge.textContent = '⭐ PREM' + (name ? ' (' + name + ')' : '');
             badge.className = 'type-badge prem';
             timerEl.style.borderColor = '#886622';
             menuBadge.textContent = '⭐ PREM • FF';
@@ -1011,12 +1170,12 @@
             badge.textContent = '🆓 FREE';
             badge.className = 'type-badge free';
             timerEl.style.borderColor = '#1f1f33';
-            menuBadge.textContent = 'v3.5 • FF';
+            menuBadge.textContent = 'v4.2 • FF';
         }
     }
 
     // ============================================================
-    // 9. TIMER
+    // 10. TIMER
     // ============================================================
     let timerInterval = null;
 
@@ -1030,9 +1189,11 @@
                 timerInterval = null;
                 localStorage.removeItem('lockcenter_saved_key');
                 localStorage.removeItem('lockcenter_login_time');
+                localStorage.removeItem('lockcenter_active_prem_id');
                 document.getElementById('loginScreen').classList.remove('hidden');
                 document.getElementById('menuScreen').style.display = 'none';
-                document.getElementById('loginError').textContent = '⏰ Key đã hết hạn! Vui lòng nhập key mới.';
+                document.getElementById('loginError').textContent = '⏰ Key đã hết hạn lúc 00:00! Vui lòng nhập key mới.';
+                renderIdList();
                 showToast('⏰ Key đã hết hạn!', 'error');
                 return;
             }
@@ -1053,7 +1214,7 @@
     }
 
     // ============================================================
-    // 10. AUDIO
+    // 11. AUDIO
     // ============================================================
     const AudioCtx = window.AudioContext || window.webkitAudioContext;
     let audioCtx = null;
@@ -1087,7 +1248,7 @@
     }
 
     // ============================================================
-    // 11. CÁC HÀM CỐT LÕI
+    // 12. CÁC HÀM CỐT LÕI
     // ============================================================
     function resetToDefault() {
         sensSlider.value = '100';
@@ -1116,6 +1277,13 @@
     touchSlider.addEventListener('input', function() { touchVal.textContent = this.value; });
 
     function clearId() {
+        const id = activationInput.value.trim();
+        if (id) {
+            let ids = getSavedIds();
+            ids = ids.filter(item => item !== id);
+            saveIds(ids);
+            renderIdList();
+        }
         activationInput.value = '';
         localStorage.removeItem('lockcenter_activation_id');
         activationStatus.textContent = '⚪';
@@ -1173,6 +1341,7 @@
             statusText.textContent = '⛔ Vui lòng nhập ID';
             return;
         }
+        addIdToList(id);
         playSuccessSound();
         localStorage.setItem('lockcenter_activation_id', id);
         activationStatus.textContent = '✅';
@@ -1283,10 +1452,32 @@
     }
 
     // ============================================================
-    // 12. KHỞI TẠO
+    // 13. KIỂM TRA HẾT HẠN KHI TAB ĐƯỢC FOCUS
+    // ============================================================
+    document.addEventListener('visibilitychange', function() {
+        if (!document.hidden) {
+            // Khi người dùng quay lại tab, kiểm tra key có hết hạn không
+            if (!isKeyValid() && document.getElementById('menuScreen').style.display !== 'none') {
+                localStorage.removeItem('lockcenter_saved_key');
+                localStorage.removeItem('lockcenter_login_time');
+                localStorage.removeItem('lockcenter_active_prem_id');
+                if (timerInterval) clearInterval(timerInterval);
+                timerInterval = null;
+                document.getElementById('loginScreen').classList.remove('hidden');
+                document.getElementById('menuScreen').style.display = 'none';
+                document.getElementById('loginError').textContent = '⏰ Key đã hết hạn lúc 00:00! Vui lòng nhập key mới.';
+                renderIdList();
+                showToast('⏰ Key đã hết hạn!', 'error');
+            }
+        }
+    });
+
+    // ============================================================
+    // 14. KHỞI TẠO
     // ============================================================
     window.onload = function() {
         loadSavedConfig();
+        renderIdList();
         document.getElementById('dateInfo').textContent = '📅 ' + new Date().toLocaleDateString('vi-VN');
         
         const loggedIn = checkAndAutoLogin();
@@ -1304,14 +1495,21 @@
             document.removeEventListener('click', initAudio);
         }, { once: true });
         
-        console.log('[LockCenter] v3.5 - Hỗ trợ FREE + PREM');
+        console.log('[LockCenter] v4.2 - Key FREE hết hạn lúc 00:00');
         console.log('[LockCenter] Key FREE hôm nay:', getTodayFreeKey());
-        const prem = getPremKeyData();
-        if (prem) console.log('[LockCenter] Key PREM đang có:', prem.key);
+        console.log('[LockCenter] Hết hạn vào:', new Date(getFreeKeyExpiry()).toLocaleString('vi-VN'));
+        const premList = getPremList();
+        if (premList.length > 0) {
+            console.log('[LockCenter] Số key PREM đang có:', premList.length);
+        }
+        const ids = getSavedIds();
+        if (ids.length > 0) {
+            console.log('[LockCenter] ID đã lưu:', ids.length);
+        }
     };
 
     // ============================================================
-    // 13. EXPOSE
+    // 15. EXPOSE
     // ============================================================
     window.handleLogin = handleLogin;
     window.logoutKey = logoutKey;
@@ -1322,10 +1520,13 @@
     window.applySettings = applySettings;
     window.resetSettings = resetSettings;
     window.launchGame = launchGame;
+    window.deleteIdFromList = deleteIdFromList;
+    window.getSavedIds = getSavedIds;
     window.getTodayFreeKey = getTodayFreeKey;
-    window.getPremKeyData = getPremKeyData;
+    window.getPremList = getPremList;
     window.getActiveKey = getActiveKey;
     window.getActiveKeyType = getActiveKeyType;
+    window.getFreeKeyExpiry = getFreeKeyExpiry;
 </script>
 </body>
 </html>
