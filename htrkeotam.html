@@ -65,31 +65,13 @@
             margin-bottom: 20px;
         }
         #loginScreen .login-box .key-hint {
-            color: #ffaa00;
-            font-size: 13px;
-            margin-bottom: 12px;
+            color: #444466;
+            font-size: 12px;
+            margin-bottom: 16px;
             background: #0f0f18;
-            padding: 10px 12px;
+            padding: 8px 12px;
             border-radius: 10px;
             border: 1px dashed #1f1f33;
-        }
-        #loginScreen .login-box .key-type-badge {
-            display: inline-block;
-            padding: 2px 14px;
-            border-radius: 20px;
-            font-size: 11px;
-            font-weight: 700;
-            margin-bottom: 12px;
-        }
-        #loginScreen .login-box .key-type-badge.free {
-            background: rgba(0, 255, 136, 0.15);
-            color: #00ff88;
-            border: 1px solid #00ff88;
-        }
-        #loginScreen .login-box .key-type-badge.prem {
-            background: rgba(255, 136, 0, 0.15);
-            color: #ff8800;
-            border: 1px solid #ff8800;
         }
         #loginScreen .login-box input {
             width: 100%;
@@ -185,11 +167,6 @@
             color: #00ff88;
             border: 1px solid #226622;
         }
-        .toast-msg.prem {
-            background: #1a0f0a;
-            color: #ff8800;
-            border: 1px solid #886622;
-        }
         .lock-center {
             max-width: 420px;
             width: 100%;
@@ -232,7 +209,6 @@
             color: #8888bb;
             border: 1px solid #2f2f4a;
         }
-        /* === NÚT THOÁT KEY === */
         .logout-btn {
             position: absolute;
             top: 16px;
@@ -275,7 +251,6 @@
         .logout-btn:hover .tooltip {
             opacity: 1;
         }
-        /* === KEY TIMER === */
         .key-timer {
             background: #0f0f18;
             border-radius: 16px;
@@ -698,7 +673,7 @@
     <div class="login-box">
         <h2>🔐 LOCK CENTER</h2>
         <p class="sub" id="loginSub">Nhập key để đăng nhập</p>
-        <div id="keyTypeBadge" class="key-type-badge free">🆓 KEY FREE</div>
+        <div class="key-hint">🔑 Vui lòng nhập key do quản trị viên cung cấp</div>
         <input type="text" id="loginKey" placeholder="Nhập key..." autofocus>
         <button class="btn-login" onclick="handleLogin()">Đăng nhập</button>
         <div class="login-error" id="loginError"></div>
@@ -717,7 +692,7 @@
 
     <div class="header">
         <h1>⚡ LOCK CENTER <small>(by hthiet)</small></h1>
-        <span class="badge" id="menuBadge">v3.3 • FF</span>
+        <span class="badge" id="menuBadge">v3.5 • FF</span>
     </div>
 
     <!-- === TIMER KEY === -->
@@ -808,7 +783,7 @@
 
 <script>
     // ============================================================
-    // 1. HÀM SINH KEY FREE (GIỐNG ADMIN)
+    // 1. HÀM SINH KEY FREE
     // ============================================================
     function generateDailyKey(date) {
         const year = date.getFullYear();
@@ -835,17 +810,8 @@
     }
 
     // ============================================================
-    // 2. QUẢN LÝ KEY
+    // 2. LẤY KEY PREM TỪ ADMIN PRO
     // ============================================================
-    const FREE_EXPIRY_HOURS = 24;
-
-    function getKeyExpiry() {
-        const saved = localStorage.getItem('lockcenter_login_time');
-        if (!saved) return null;
-        const loginTime = parseInt(saved);
-        return loginTime + (FREE_EXPIRY_HOURS * 60 * 60 * 1000);
-    }
-
     function getPremKeyData() {
         const saved = localStorage.getItem('admin_prem_key_data');
         if (!saved) return null;
@@ -863,28 +829,46 @@
         }
     }
 
+    function getPremKey() {
+        const data = getPremKeyData();
+        return data ? data.key : null;
+    }
+
+    function getPremExpiry() {
+        const data = getPremKeyData();
+        return data ? data.expiry : null;
+    }
+
+    // ============================================================
+    // 3. LẤY KEY ĐANG HOẠT ĐỘNG
+    // ============================================================
     function getActiveKey() {
-        const prem = getPremKeyData();
-        if (prem) return prem.key;
+        const prem = getPremKey();
+        if (prem) return prem;
         return getTodayFreeKey();
     }
 
     function getActiveKeyType() {
-        const prem = getPremKeyData();
+        const prem = getPremKey();
         if (prem) return 'prem';
         return 'free';
     }
 
-    function getKeyExpiryTime() {
-        const prem = getPremKeyData();
-        if (prem) return prem.expiry;
-        return getKeyExpiry();
+    function getActiveKeyExpiry() {
+        const premExpiry = getPremExpiry();
+        if (premExpiry) return premExpiry;
+        const saved = localStorage.getItem('lockcenter_login_time');
+        if (!saved) return null;
+        return parseInt(saved) + (24 * 60 * 60 * 1000);
     }
 
+    // ============================================================
+    // 4. KIỂM TRA KEY
+    // ============================================================
     function isKeyValid() {
         const savedKey = localStorage.getItem('lockcenter_saved_key');
         if (!savedKey) return false;
-        const expiry = getKeyExpiryTime();
+        const expiry = getActiveKeyExpiry();
         if (!expiry) return false;
         const activeKey = getActiveKey();
         if (savedKey !== activeKey) return false;
@@ -892,7 +876,7 @@
     }
 
     function getRemainingTime() {
-        const expiry = getKeyExpiryTime();
+        const expiry = getActiveKeyExpiry();
         if (!expiry) return 0;
         const remaining = expiry - Date.now();
         return remaining > 0 ? remaining : 0;
@@ -907,7 +891,7 @@
     }
 
     // ============================================================
-    // 3. KIỂM TRA KEY KHI TẢI TRANG
+    // 5. KIỂM TRA TỰ ĐỘNG
     // ============================================================
     function checkAndAutoLogin() {
         const activeKey = getActiveKey();
@@ -931,31 +915,46 @@
             document.getElementById('menuScreen').style.display = 'none';
             localStorage.removeItem('lockcenter_saved_key');
             localStorage.removeItem('lockcenter_login_time');
-            updateLoginKeyTypeDisplay();
             return false;
         }
     }
 
     // ============================================================
-    // 4. XỬ LÝ ĐĂNG NHẬP
+    // 6. XỬ LÝ ĐĂNG NHẬP
     // ============================================================
     function handleLogin() {
         const input = document.getElementById('loginKey');
         const error = document.getElementById('loginError');
         const success = document.getElementById('loginSuccess');
         const userKey = input.value.trim().toUpperCase();
-        const activeKey = getActiveKey();
+
+        // Kiểm tra FREE
+        const freeKey = getTodayFreeKey();
+        // Kiểm tra PREM
+        const premData = getPremKeyData();
+        const premKey = premData ? premData.key : null;
 
         error.textContent = '';
         success.textContent = '';
 
-        if (userKey === activeKey) {
-            localStorage.setItem('lockcenter_saved_key', activeKey);
+        let keyType = null;
+        let matchedKey = null;
+
+        if (userKey === freeKey) {
+            keyType = 'free';
+            matchedKey = freeKey;
+        } else if (premKey && userKey === premKey) {
+            keyType = 'prem';
+            matchedKey = premKey;
+        }
+
+        if (keyType) {
+            localStorage.setItem('lockcenter_saved_key', matchedKey);
             localStorage.setItem('lockcenter_login_time', String(Date.now()));
             
             playSuccessSound();
-            const keyType = getActiveKeyType();
-            success.textContent = '✅ Đăng nhập thành công! Key ' + (keyType === 'prem' ? 'PREM' : 'FREE') + ' có hiệu lực.';
+            const typeName = keyType === 'prem' ? 'PREM' : 'FREE';
+            success.textContent = '✅ Đăng nhập thành công! Key ' + typeName + ' có hiệu lực.';
             
             setTimeout(() => {
                 document.getElementById('loginScreen').classList.add('hidden');
@@ -975,7 +974,7 @@
     }
 
     // ============================================================
-    // 5. THOÁT KEY (ĐĂNG XUẤT)
+    // 7. THOÁT KEY
     // ============================================================
     function logoutKey() {
         if (confirm('Bạn có chắc muốn thoát key? Bạn sẽ cần nhập lại key để đăng nhập.')) {
@@ -990,14 +989,12 @@
             document.getElementById('loginKey').focus();
             document.getElementById('loginError').textContent = '';
             document.getElementById('loginSuccess').textContent = '';
-            updateLoginKeyTypeDisplay();
             showToast('🚪 Đã thoát key! Vui lòng đăng nhập lại.', 'error');
-            console.log('[LockCenter] Đã đăng xuất');
         }
     }
 
     // ============================================================
-    // 6. HIỂN THỊ LOẠI KEY
+    // 8. HIỂN THỊ LOẠI KEY
     // ============================================================
     function updateKeyTypeDisplay() {
         const type = getActiveKeyType();
@@ -1014,28 +1011,12 @@
             badge.textContent = '🆓 FREE';
             badge.className = 'type-badge free';
             timerEl.style.borderColor = '#1f1f33';
-            menuBadge.textContent = 'v3.3 • FF';
-        }
-    }
-
-    function updateLoginKeyTypeDisplay() {
-        const type = getActiveKeyType();
-        const badge = document.getElementById('keyTypeBadge');
-        const sub = document.getElementById('loginSub');
-        
-        if (type === 'prem') {
-            badge.textContent = '⭐ KEY PREM';
-            badge.className = 'key-type-badge prem';
-            sub.textContent = 'Nhập key PREM để đăng nhập';
-        } else {
-            badge.textContent = '🆓 KEY FREE';
-            badge.className = 'key-type-badge free';
-            sub.textContent = 'Nhập key FREE để đăng nhập';
+            menuBadge.textContent = 'v3.5 • FF';
         }
     }
 
     // ============================================================
-    // 7. TIMER ĐẾM NGƯỢC
+    // 9. TIMER
     // ============================================================
     let timerInterval = null;
 
@@ -1052,7 +1033,6 @@
                 document.getElementById('loginScreen').classList.remove('hidden');
                 document.getElementById('menuScreen').style.display = 'none';
                 document.getElementById('loginError').textContent = '⏰ Key đã hết hạn! Vui lòng nhập key mới.';
-                updateLoginKeyTypeDisplay();
                 showToast('⏰ Key đã hết hạn!', 'error');
                 return;
             }
@@ -1073,16 +1053,14 @@
     }
 
     // ============================================================
-    // 8. AUDIO ENGINE
+    // 10. AUDIO
     // ============================================================
     const AudioCtx = window.AudioContext || window.webkitAudioContext;
     let audioCtx = null;
 
-    function playBeep(freq = 1200, duration = 80, volume = 0.15) {
+    function playBeep(freq, duration, volume) {
         try {
-            if (!audioCtx) {
-                audioCtx = new AudioCtx();
-            }
+            if (!audioCtx) audioCtx = new AudioCtx();
             const osc = audioCtx.createOscillator();
             const gain = audioCtx.createGain();
             osc.type = 'sine';
@@ -1093,17 +1071,7 @@
             gain.connect(audioCtx.destination);
             osc.start();
             osc.stop(audioCtx.currentTime + duration / 1000);
-        } catch (e) {}
-    }
-
-    function playToggleSound(on) {
-        if (on) {
-            playBeep(1400, 70, 0.12);
-            setTimeout(() => playBeep(1800, 60, 0.10), 90);
-        } else {
-            playBeep(800, 80, 0.12);
-            setTimeout(() => playBeep(600, 70, 0.10), 100);
-        }
+        } catch(e) {}
     }
 
     function playErrorSound() {
@@ -1119,7 +1087,7 @@
     }
 
     // ============================================================
-    // 9. CÁC HÀM CỐT LÕI
+    // 11. CÁC HÀM CỐT LÕI
     // ============================================================
     function resetToDefault() {
         sensSlider.value = '100';
@@ -1315,12 +1283,11 @@
     }
 
     // ============================================================
-    // 10. KHỞI TẠO
+    // 12. KHỞI TẠO
     // ============================================================
     window.onload = function() {
         loadSavedConfig();
         document.getElementById('dateInfo').textContent = '📅 ' + new Date().toLocaleDateString('vi-VN');
-        updateLoginKeyTypeDisplay();
         
         const loggedIn = checkAndAutoLogin();
         
@@ -1337,14 +1304,14 @@
             document.removeEventListener('click', initAudio);
         }, { once: true });
         
-        console.log('[LockCenter] v3.3 - Hỗ trợ FREE và PREM key');
+        console.log('[LockCenter] v3.5 - Hỗ trợ FREE + PREM');
         console.log('[LockCenter] Key FREE hôm nay:', getTodayFreeKey());
         const prem = getPremKeyData();
         if (prem) console.log('[LockCenter] Key PREM đang có:', prem.key);
     };
 
     // ============================================================
-    // 11. EXPOSE GLOBALS
+    // 13. EXPOSE
     // ============================================================
     window.handleLogin = handleLogin;
     window.logoutKey = logoutKey;
@@ -1356,9 +1323,9 @@
     window.resetSettings = resetSettings;
     window.launchGame = launchGame;
     window.getTodayFreeKey = getTodayFreeKey;
+    window.getPremKeyData = getPremKeyData;
     window.getActiveKey = getActiveKey;
     window.getActiveKeyType = getActiveKeyType;
-    window.getPremKeyData = getPremKeyData;
 </script>
 </body>
 </html>
