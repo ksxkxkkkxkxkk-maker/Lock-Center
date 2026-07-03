@@ -1,22 +1,15 @@
-Bypass By nhatanh Dev
-
-```
-_________________________________
-|  LOCK CENTER - USER MENU     |
-|  KEY VERIFICATION SYSTEM     |
-|_________________________________|
-```
-
-palofsc:
-
-Đây là file lockcenter.html - menu chính cho người dùng. Key được liên kết đồng bộ với admin.html (cùng thuật toán sinh key). Người dùng không thấy key trước, phải nhập key do admin cung cấp.
-
-```html
 <!DOCTYPE html>
 <html lang="vi">
 <head>
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0, maximum-scale=1.0, user-scalable=no">
+    
+    <!-- ===== WEBCLIP CHO iOS ===== -->
+    <meta name="apple-mobile-web-app-capable" content="yes">
+    <meta name="apple-mobile-web-app-status-bar-style" content="black-translucent">
+    <meta name="apple-mobile-web-app-title" content="LockCenter FF">
+    <link rel="apple-touch-icon" href="data:image/svg+xml,%3Csvg xmlns='http://www.w3.org/2000/svg' viewBox='0 0 100 100'%3E%3Crect width='100' height='100' fill='%230a0a12' rx='20'/%3E%3Ctext x='50' y='68' font-size='50' text-anchor='middle' fill='%2300d4ff' font-weight='bold'%3E⚡%3C/text%3E%3C/svg%3E">
+    
     <title>LockCenter - Free Fire</title>
     <style>
         * { margin: 0; padding: 0; box-sizing: border-box; }
@@ -72,11 +65,11 @@ palofsc:
             margin-bottom: 20px;
         }
         #loginScreen .login-box .key-hint {
-            color: #444466;
-            font-size: 12px;
+            color: #ffaa00;
+            font-size: 13px;
             margin-bottom: 12px;
             background: #0f0f18;
-            padding: 8px 12px;
+            padding: 10px 12px;
             border-radius: 10px;
             border: 1px dashed #1f1f33;
         }
@@ -586,20 +579,18 @@ palofsc:
 </head>
 <body>
 
-<!-- ===== MÀN HÌNH ĐEN ĐĂNG NHẬP ===== -->
 <div id="loginScreen">
     <div class="login-box">
         <h2>🔐 LOCK CENTER</h2>
-        <p class="sub">Nhập key để đăng nhập vào menu</p>
-        <div class="key-hint">🔑 Vui lòng nhập key do quản trị viên cung cấp</div>
-        <input type="password" id="loginKey" placeholder="Nhập key..." autofocus>
+        <p class="sub">Nhập key để đăng nhập</p>
+        <div class="key-hint">🔑 Key hôm nay: <span id="todayKeyDisplay">------</span></div>
+        <input type="text" id="loginKey" placeholder="Nhập key..." autofocus>
         <button class="btn-login" onclick="handleLogin()">Đăng nhập</button>
         <div class="login-error" id="loginError"></div>
         <div class="date-info" id="dateInfo"></div>
     </div>
 </div>
 
-<!-- ===== MENU LOCK CENTER ===== -->
 <div class="lock-center" id="menuScreen" style="display:none;">
     <div class="header">
         <h1>⚡ LOCK CENTER <small>(by hthiet)</small></h1>
@@ -686,9 +677,7 @@ palofsc:
 </div>
 
 <script>
-    // ============================================================
-    // 1. HÀM SINH KEY ĐỒNG BỘ VỚI ADMIN (CÙNG THUẬT TOÁN)
-    // ============================================================
+    // ===== HÀM SINH KEY =====
     function generateDailyKey(date) {
         const year = date.getFullYear();
         const month = String(date.getMonth() + 1).padStart(2, '0');
@@ -715,9 +704,7 @@ palofsc:
         return generateDailyKey(new Date());
     }
 
-    // ============================================================
-    // 2. AUDIO ENGINE
-    // ============================================================
+    // ===== AUDIO =====
     const AudioCtx = window.AudioContext || window.webkitAudioContext;
     let audioCtx = null;
 
@@ -736,25 +723,7 @@ palofsc:
             gain.connect(audioCtx.destination);
             osc.start();
             osc.stop(audioCtx.currentTime + duration / 1000);
-        } catch (e) {
-            console.warn('Audio error:', e);
-        }
-    }
-
-    function playToggleSound(on) {
-        if (on) {
-            playBeep(1400, 70, 0.12);
-            setTimeout(() => playBeep(1800, 60, 0.10), 90);
-        } else {
-            playBeep(800, 80, 0.12);
-            setTimeout(() => playBeep(600, 70, 0.10), 100);
-        }
-    }
-
-    function playErrorSound() {
-        playBeep(300, 150, 0.20);
-        setTimeout(() => playBeep(250, 120, 0.18), 160);
-        setTimeout(() => playBeep(200, 100, 0.16), 300);
+        } catch (e) {}
     }
 
     function playSuccessSound() {
@@ -763,9 +732,17 @@ palofsc:
         setTimeout(() => playBeep(1800, 70, 0.16), 200);
     }
 
-    // ============================================================
-    // 3. XỬ LÝ ĐĂNG NHẬP
-    // ============================================================
+    function playErrorSound() {
+        playBeep(300, 150, 0.20);
+        setTimeout(() => playBeep(250, 120, 0.18), 160);
+        setTimeout(() => playBeep(200, 100, 0.16), 300);
+    }
+
+    // ===== HIỂN THỊ KEY =====
+    document.getElementById('todayKeyDisplay').textContent = getTodayKey();
+    document.getElementById('dateInfo').textContent = '📅 ' + new Date().toLocaleDateString('vi-VN');
+
+    // ===== ĐĂNG NHẬP =====
     function handleLogin() {
         const input = document.getElementById('loginKey');
         const error = document.getElementById('loginError');
@@ -788,9 +765,7 @@ palofsc:
         }
     }
 
-    // ============================================================
-    // 4. CÁC HÀM CỐT LÕI
-    // ============================================================
+    // ===== CÁC HÀM CỐT LÕI =====
     function resetToDefault() {
         sensSlider.value = '100';
         sensVal.textContent = '100';
@@ -814,12 +789,8 @@ palofsc:
     const fileInput = document.getElementById('supportFile');
     const fileStatus = document.getElementById('fileStatus');
 
-    sensSlider.addEventListener('input', function() {
-        sensVal.textContent = this.value;
-    });
-    touchSlider.addEventListener('input', function() {
-        touchVal.textContent = this.value;
-    });
+    sensSlider.addEventListener('input', function() { sensVal.textContent = this.value; });
+    touchSlider.addEventListener('input', function() { touchVal.textContent = this.value; });
 
     function clearId() {
         activationInput.value = '';
@@ -828,7 +799,6 @@ palofsc:
         activationStatus.className = 'activation-status';
         statusText.textContent = '🗑️ Đã xoá ID';
         profileStatus.textContent = 'Mặc định';
-        playBeep(600, 60, 0.10);
         showToast('🗑️ Đã xoá ID', 'success');
     }
 
@@ -836,16 +806,15 @@ palofsc:
         fileInput.value = '';
         fileStatus.textContent = '⚪';
         fileStatus.className = 'file-status';
-        playBeep(600, 60, 0.10);
         showToast('🗑️ Đã xoá file', 'success');
     }
 
     fileInput.addEventListener('change', function() {
         if (this.files && this.files.length > 0) {
             const fileName = this.files[0].name;
-            fileStatus.textContent = `✅ ${fileName}`;
+            fileStatus.textContent = '✅ ' + fileName;
             fileStatus.className = 'file-status active';
-            showToast(`📁 Đã tải file: ${fileName}`, 'success');
+            showToast('📁 Đã tải file: ' + fileName, 'success');
             playSuccessSound();
         } else {
             fileStatus.textContent = '⚪';
@@ -883,11 +852,11 @@ palofsc:
         }
         playSuccessSound();
         localStorage.setItem('lockcenter_activation_id', id);
-        activationStatus.textContent = `✅`;
+        activationStatus.textContent = '✅';
         activationStatus.className = 'activation-status active';
-        statusText.textContent = `🔑 Đã kích hoạt ID: ${id}`;
-        profileStatus.textContent = `ID: ${id}`;
-        showToast(`✅ Kích hoạt ID ${id} thành công`, 'success');
+        statusText.textContent = '🔑 Đã kích hoạt ID: ' + id;
+        profileStatus.textContent = 'ID: ' + id;
+        showToast('✅ Kích hoạt ID ' + id + ' thành công', 'success');
     }
 
     function toggleSwitch(id) {
@@ -895,11 +864,11 @@ palofsc:
         const el = document.getElementById(id);
         el.classList.toggle('active');
         const isActive = el.classList.contains('active');
-        playToggleSound(isActive);
+        if (isActive) playBeep(1400, 70, 0.12);
+        else playBeep(800, 80, 0.12);
         const name = id.replace('toggle', '');
-        const state = isActive ? 'BẬT' : 'TẮT';
-        statusText.textContent = `${name} → ${state}`;
-        showToast(`✅ Đã kích hoạt ${name}`, 'success');
+        statusText.textContent = name + ' → ' + (isActive ? 'BẬT' : 'TẮT');
+        showToast('✅ Đã kích hoạt ' + name, 'success');
     }
 
     function applySettings() {
@@ -909,23 +878,12 @@ palofsc:
         const rung = document.getElementById('toggleRung').classList.contains('active') ? 'ON' : 'OFF';
         const lo = document.getElementById('toggleLo').classList.contains('active') ? 'ON' : 'OFF';
         const lock = document.getElementById('toggleLockhead').classList.contains('active') ? 'ON' : 'OFF';
-        const config = {
-            sensitivity: parseInt(sens),
-            touchSpeed: parseInt(touch),
-            fixRung: rung,
-            fixLo: lo,
-            lockHead: lock
-        };
+        const config = { sensitivity: parseInt(sens), touchSpeed: parseInt(touch), fixRung: rung, fixLo: lo, lockHead: lock };
         localStorage.setItem('lockcenter_config', JSON.stringify(config));
         statusText.textContent = '✅ Đã áp dụng!';
-        profileStatus.textContent = `S:${sens} T:${touch} R:${rung} L:${lo} H:${lock}`;
+        profileStatus.textContent = 'S:' + sens + ' T:' + touch + ' R:' + rung + ' L:' + lo + ' H:' + lock;
         playSuccessSound();
         showToast('✅ Đã áp dụng cấu hình thành công', 'success');
-        try {
-            if (typeof window.ff_bridge !== 'undefined' && window.ff_bridge.apply) {
-                window.ff_bridge.apply(config);
-            }
-        } catch (e) { console.warn('Bridge error:', e); }
     }
 
     function resetSettings() {
@@ -940,50 +898,34 @@ palofsc:
         localStorage.removeItem('lockcenter_config');
         statusText.textContent = '🔄 Reset về mặc định (100)';
         profileStatus.textContent = 'Mặc định';
-        playBeep(700, 50, 0.10);
-        setTimeout(() => playBeep(500, 50, 0.10), 120);
-        setTimeout(() => playBeep(300, 60, 0.12), 240);
         showToast('🔄 Đã reset về cài đặt gốc (100)', 'success');
     }
 
     function launchGame(version) {
         if (!requireActivation()) return;
-        let packageName = '', scheme = '', storeUrl = '';
-        if (version === 'freefire') {
-            packageName = 'com.dts.freefireth';
-            scheme = 'freefire://';
-            storeUrl = 'https://play.google.com/store/apps/details?id=com.dts.freefireth';
-        } else if (version === 'freefiremax') {
-            packageName = 'com.dts.freefiremax';
-            scheme = 'freefiremax://';
-            storeUrl = 'https://play.google.com/store/apps/details?id=com.dts.freefiremax';
-        }
+        const gameName = version === 'freefire' ? 'Free Fire' : 'Free Fire Max';
+        const scheme = version === 'freefire' ? 'freefire://' : 'freefiremax://';
+        const storeUrl = version === 'freefire' ? 
+            'https://play.google.com/store/apps/details?id=com.dts.freefireth' :
+            'https://play.google.com/store/apps/details?id=com.dts.freefiremax';
+        
+        statusText.textContent = '🚀 Đang mở ' + gameName + '...';
         playBeep(800, 50, 0.10);
         setTimeout(() => playBeep(1100, 50, 0.12), 100);
-        setTimeout(() => playBeep(1500, 60, 0.14), 200);
-        const gameName = version === 'freefire' ? 'Free Fire' : 'Free Fire Max';
-        statusText.textContent = `🚀 Đang mở ${gameName}...`;
+        
         try {
-            const deepLink = scheme;
-            const iframe = document.createElement('iframe');
-            iframe.style.display = 'none';
-            iframe.src = deepLink;
-            document.body.appendChild(iframe);
-            setTimeout(() => { window.location.href = deepLink; }, 150);
-            setTimeout(() => { iframe.remove(); }, 1000);
+            window.location.href = scheme;
             setTimeout(() => {
                 if (document.visibilityState === 'visible') {
                     window.open(storeUrl, '_blank');
-                    statusText.textContent = `📲 Mở ${gameName} thất bại, chuyển đến cửa hàng`;
+                    statusText.textContent = '📲 Mở ' + gameName + ' thất bại, chuyển đến cửa hàng';
                 }
-            }, 2500);
-            showToast(`🚀 Đang mở ${gameName}...`, 'success');
-        } catch (e) {
-            console.error('Launch error:', e);
+            }, 2000);
+            showToast('🚀 Đang mở ' + gameName + '...', 'success');
+        } catch(e) {
             window.open(storeUrl, '_blank');
-            statusText.textContent = `⚠️ Lỗi mở ${gameName}, đã chuyển đến cửa hàng`;
         }
-        profileStatus.textContent = `🎮 ${gameName}`;
+        profileStatus.textContent = '🎮 ' + gameName;
     }
 
     function showToast(msg, type = '') {
@@ -1000,69 +942,35 @@ palofsc:
         const savedId = localStorage.getItem('lockcenter_activation_id');
         if (savedId) {
             activationInput.value = savedId;
-            activationStatus.textContent = `✅`;
+            activationStatus.textContent = '✅';
             activationStatus.className = 'activation-status active';
-            profileStatus.textContent = `ID: ${savedId}`;
+            profileStatus.textContent = 'ID: ' + savedId;
         }
         const saved = localStorage.getItem('lockcenter_config');
         if (!saved) return;
         try {
             const config = JSON.parse(saved);
-            if (config.sensitivity) {
-                sensSlider.value = config.sensitivity;
-                sensVal.textContent = config.sensitivity;
-            }
-            if (config.touchSpeed) {
-                touchSlider.value = config.touchSpeed;
-                touchVal.textContent = config.touchSpeed;
-            }
+            if (config.sensitivity) { sensSlider.value = config.sensitivity; sensVal.textContent = config.sensitivity; }
+            if (config.touchSpeed) { touchSlider.value = config.touchSpeed; touchVal.textContent = config.touchSpeed; }
             if (config.fixRung === 'ON') document.getElementById('toggleRung').classList.add('active');
-            else document.getElementById('toggleRung').classList.remove('active');
             if (config.fixLo === 'ON') document.getElementById('toggleLo').classList.add('active');
-            else document.getElementById('toggleLo').classList.remove('active');
             if (config.lockHead === 'ON') document.getElementById('toggleLockhead').classList.add('active');
-            else document.getElementById('toggleLockhead').classList.remove('active');
             statusText.textContent = '📂 Đã tải cấu hình';
-        } catch (e) { console.warn('Load config error:', e); }
+        } catch(e) {}
     }
 
-    // ============================================================
-    // 5. KHỞI TẠO
-    // ============================================================
     window.onload = function() {
+        loadSavedConfig();
         document.getElementById('loginScreen').classList.remove('hidden');
         document.getElementById('menuScreen').style.display = 'none';
         document.getElementById('loginKey').focus();
-        document.getElementById('dateInfo').textContent = '📅 ' + new Date().toLocaleDateString('vi-VN');
-        
         document.addEventListener('click', function initAudio() {
             if (!audioCtx) {
                 try { audioCtx = new (window.AudioContext || window.webkitAudioContext)(); } catch(e) {}
             }
             document.removeEventListener('click', initAudio);
         }, { once: true });
-        
-        console.log('[LockCenter] v3.0 - Key động đồng bộ với Admin');
-        console.log('[LockCenter] Key hôm nay (ẩn):', getTodayKey());
     };
-
-    // ============================================================
-    // 6. BRIDGE & EXPOSE
-    // ============================================================
-    window.ff_bridge = window.ff_bridge || {
-        apply: function(cfg) {
-            console.log('[Bridge] Apply config:', cfg);
-            if (window.parent) {
-                window.parent.postMessage({ type: 'FF_LOCKCENTER', config: cfg }, '*');
-            }
-        }
-    };
-
-    window.addEventListener('message', function(e) {
-        if (e.data && e.data.type === 'FF_STATUS') {
-            statusText.textContent = `🎮 ${e.data.msg || 'Đã nhận phản hồi'}`;
-        }
-    });
 
     window.handleLogin = handleLogin;
     window.activateId = activateId;
@@ -1072,21 +980,6 @@ palofsc:
     window.applySettings = applySettings;
     window.resetSettings = resetSettings;
     window.launchGame = launchGame;
-    window.resetToDefault = resetToDefault;
-    window.getTodayKey = getTodayKey;
 </script>
-
 </body>
 </html>
-```
-
----
-
-📌 CÁCH HOẠT ĐỘNG
-
-1. Bạn (Admin) mở admin.html → xem key hôm nay
-2. Gửi key cho người dùng qua tin nhắn
-3. Người dùng mở lockcenter.html → màn hình đen yêu cầu nhập key
-4. Nhập đúng key → vào menu LockCenter
-5. Key tự động đổi mỗi ngày (đồng bộ giữa 2 file)
-6. Key không hiển thị trên màn hình đăng nhập của người dùng
